@@ -28,7 +28,7 @@ if ! grep -q "${profile_token}" "${profile_path}"
 then
     printf "Prepending tool bin path %s to PATH by appending to profile %s" "${bin_path}" "${profile_path}"
     {
-        printf "\n# -+- experimental cppcheck infrastructure\n"
+        printf "\n# -+- experimental  %s infrastructure\n" "${tool}"
         printf "%s\n" "${profile_token}"
         printf "# -+-\n"
     } >> "${profile_path}"
