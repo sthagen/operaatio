@@ -5,7 +5,7 @@ binary="${tool}"
 server_url="https://github.com"
 provider_org="Kitware"
 repo_dir="CMake"
-version="3.23.2"
+version=${1:3.23.2}
 upstream_repo_url="${server_url}/${provider_org}/${repo_dir}"
 build="${HOME}/d/${tool}"
 prefix="/opt/${tool}"
@@ -31,7 +31,7 @@ printf "LD Library Path shall contain (%s) and value found is (%s)\n" "/opt/gcc/
 
 tar -xzvf "${tool}"-"${version}".tar.gz && cd "${tool}"-"${version}"/ || exit 1
 ./bootstrap -- -DCMAKE_INSTALL_PREFIX:PATH="${prefix}" || exit 1
-make -j$(nproc) && make install || exit 1
+make -j"$(nproc)" && make install || exit 1
 
 if ! grep -q "${profile_token}" "${profile_path}"
 then
