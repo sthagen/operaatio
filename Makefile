@@ -2,7 +2,11 @@ SHELL = /bin/bash
 
 .DEFAULT_GOAL := help
 
-.PHONY: cppcheck elixir erlang help
+.PHONY: cmake cppcheck elixir erlang help
+
+cppcheck:
+	src/deploy-cmake.sh
+
 cppcheck:
 	src/deploy-cppcheck.sh
 
