@@ -5,7 +5,7 @@ SHELL = /bin/bash
 .PHONY: cmake cppcheck elixir erlang help
 
 cppcheck:
-	src/deploy-cmake.sh
+	src/deploy-cmake.sh 3.23.2
 
 cppcheck:
 	src/deploy-cppcheck.sh
