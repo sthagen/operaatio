@@ -2,7 +2,7 @@ SHELL = /bin/bash
 
 .DEFAULT_GOAL := help
 
-.PHONY: cmake cppcheck elixir erlang gcc help
+.PHONY: cmake cppcheck elixir erlang gcc help v
 
 cmake:
 	src/deploy-cmake.sh 3.23.2
@@ -20,4 +20,7 @@ gcc:
 	src/deploy-gcc.sh 12.1.0
 
 help:
-	@echo make cmake cppcheck elixir erlang gcc help
+	@echo make cmake cppcheck elixir erlang gcc help v
+
+v:
+	src/deploy-v.sh
