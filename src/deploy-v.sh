@@ -1,10 +1,10 @@
 #! /usr/bin/env bash
-# Deploy cppcheck as compiled from a public proxy repository for system wide use
-tool="cppcheck"
+# Deploy v as compiled from a public proxy repository for system wide use
+tool="v"
 binary="${tool}"
 server_url="https://github.com"
 provider_org="sthagen"
-repo_dir="danmar-${tool}"
+repo_dir="vlang-${tool}"
 upstream_repo_url="${server_url}/${provider_org}/${repo_dir}"
 build="${HOME}/d/${tool}"
 prefix="/opt/${tool}"
@@ -20,9 +20,11 @@ mkdir -p "${build}" && cd "${build}"  || exit 1
 
 cd "${repo_dir}" || exit 1
 
-git pull  && rm -fr build && \
-  cmake -DCMAKE_INSTALL_PREFIX="${prefix}" -S . -B build && \
-  cmake --build build --config Release --target install
+printf "INFO: Expect some failed tests (with the run taking approx 3 minutes) ...\n"
+printf "DEBUG: ... when no X11 extensions are installed (which is normal for our setups)\n"
+PREFIX="${prefix}" make all check
+
+cp -a "${binary}" "${bin_path}/"
 
 if ! grep -q "${profile_token}" "${profile_path}"
 then
