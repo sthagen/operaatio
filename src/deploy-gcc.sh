@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-# Deploy cmake as compiled from the public vendor repository for system wide use
+# Deploy the given version of gcc as compiled from the public vendor repository for system wide use
 tool="gcc"
 binary="${tool}"
 secondary="g++"
