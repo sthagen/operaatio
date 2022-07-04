@@ -1,28 +1,36 @@
 #! /usr/bin/env bash
-# Deploy cppcheck as compiled from a public proxy repository for system wide use
-tool="cppcheck"
+# Deploy emacs as compiled from a public proxy repository for system wide use
+tool="emacs"
 binary="${tool}"
-server_url="https://github.com"
-provider_org="sthagen"
+server_url="https://ftp.gnu.org/pub/"
+provider_org="gnu"
 repo_dir="danmar-${tool}"
+version=${1:28.1}
 upstream_repo_url="${server_url}/${provider_org}/${repo_dir}"
 build="${HOME}/d/${tool}"
 prefix="/opt/${tool}"
 bin_path="${prefix}/bin"
 profile_path="${HOME}"/.bashrc
-profile_token="export PATH=${bin_path}:\$PATH"
+profile_token="export PATH=${bin_path}:\$HOME/.emacs.d/bin:\$PATH"
 
 sudo mkdir -p "${prefix}" && sudo chown "${USER}":"${USER}" "${prefix}" || exit 1
 
 mkdir -p "${build}" && cd "${build}"  || exit 1
 
-[ -d "${build}/${repo_dir}" ] || git clone "${upstream_repo_url}"
+common_base_url="${common_base_url}/${tool}/${tool}-${version}/${tool}-${version}"
+curl -kLO "${common_base_url}".tar.gz
+curl -kLO "${common_base_url}".tar.gz.sig
+curl -kLO "${upstream_repo_url}/${provider_org}"-keyring.gpg
 
-cd "${repo_dir}" || exit 1
+gpg --verify --keyring ./"${provider_org}"-keyring.gpg "${tool}-${version}.tar.xz.sig" || exit 1
 
-git pull  && rm -fr build && \
-  cmake -DCMAKE_INSTALL_PREFIX="${prefix}" -S . -B build && \
-  cmake --build build --config Release --target install
+tar -axvf "${tool}-${version}".tar.xz && cd "${tool}-${version}" || exit 1
+
+# sudo apt install libxpm-dev libjpeg-dev libgif-dev libtiff-dev libcairo-dev libharfbuzz-dev
+
+./configure --prefix="${prefix}" --with-x-toolkit=no
+
+make -j"$(nproc)"
 
 if ! grep -q "${profile_token}" "${profile_path}"
 then
