@@ -2,7 +2,10 @@ SHELL = /bin/bash
 
 .DEFAULT_GOAL := help
 
-.PHONY: cmake cppcheck elixir emacs erlang gcc help v
+.PHONY: btop cmake cppcheck elixir emacs erlang gcc help v
+
+btop:
+	src/deploy-btop.sh
 
 cmake:
 	src/deploy-cmake.sh 3.23.2
@@ -23,7 +26,7 @@ gcc:
 	src/deploy-gcc.sh 12.1.0
 
 help:
-	@echo make cmake cppcheck elixir emacs erlang gcc help v
+	@echo make btop cmake cppcheck elixir emacs erlang gcc help v
 
 v:
 	src/deploy-v.sh
