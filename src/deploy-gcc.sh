@@ -40,7 +40,13 @@ tar -xzf "${tool}-${version}.tar.xz" && cd "${tool}-${version}/" || exit 1
     --disable-multilib \
     --prefix="${prefix}" || exit 1
 
-make -j"$(nproc)" && make install || exit 1
+if [ $(($(nproc) - 8)) -gt 0 ]
+then
+    parallel='-j 4'
+else
+    parallel=''
+fi
+make "${parallel}" && make install || exit 1
 
 if ! grep -q "${profile_token}" "${profile_path}"
 then
