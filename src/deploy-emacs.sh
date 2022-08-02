@@ -4,7 +4,7 @@ tool="emacs"
 binary="${tool}"
 server_url="https://ftp.gnu.org/pub/"
 provider_org="gnu"
-repo_dir="danmar-${tool}"
+repo_dir="${tool}"
 version=${1:28.1}
 upstream_repo_url="${server_url}/${provider_org}/${repo_dir}"
 build="${HOME}/d/${tool}"
@@ -17,7 +17,7 @@ sudo mkdir -p "${prefix}" && sudo chown "${USER}":"${USER}" "${prefix}" || exit 
 
 mkdir -p "${build}" && cd "${build}"  || exit 1
 
-common_base_url="${common_base_url}/${tool}/${tool}-${version}/${tool}-${version}"
+common_base_url="${common_base_url}/${repo_dir}/${tool}-${version}/${tool}-${version}"
 curl -kLO "${common_base_url}".tar.gz
 curl -kLO "${common_base_url}".tar.gz.sig
 curl -kLO "${upstream_repo_url}/${provider_org}"-keyring.gpg
