@@ -7,7 +7,8 @@ server_url="https://ftp.gnu.org"
 provider_org="gnu"
 repo_dir="gcc"
 version=${1:12.1.0}
-upstream_repo_url="${server_url}/${provider_org}/${repo_dir}"
+common_base_url="${server_url}/pub/${provider_org}/${repo_dir}/${tool}-"
+keyring_url="${server_url}/${provider_org}/${provider_org}-keyring.gpg"
 build="${HOME}/d/${tool}"
 prefix="/opt/${tool}"
 bin_path="${prefix}/bin"
@@ -19,18 +20,25 @@ sudo mkdir -p "${prefix}" && sudo chown "${USER}":"${USER}" "${prefix}" || exit 
 
 mkdir -p "${build}" && cd "${build}"  || exit 1
 
-common_base_url="${common_base_url}/${tool}/${tool}-${version}/${tool}-${version}"
-curl -kLO "${common_base_url}".tar.gz
-curl -kLO "${common_base_url}".tar.gz.sig
-curl -kLO "${upstream_repo_url}/${provider_org}"-keyring.gpg
+printf "Installing emacs(%s) from upstream source below (%s) ...\n" "${version}" "${prefix}"
+curl -kLO "${common_base_url}${version}".tar.xz
+curl -kLO "${common_base_url}${version}".tar.xz.sig
+curl -kLO "${keyring_url}"
 
-gpg --verify --keyring ./"${provider_org}"-keyring.gpg "${tool}-${version}.tar.gz.sig" || exit 1
+gpg --verify --keyring ./"${provider_org}"-keyring.gpg "${tool}-${version}.tar.xz.sig" || exit 1
 
-tar -xzf "${tool}-${version}.tar.gz" && cd "${tool}-${version}/" || exit 1
+tar -xzf "${tool}-${version}.tar.xz" && cd "${tool}-${version}/" || exit 1
 
 ./contrib/download_prerequisites && mkdir -p ../objdir && cd ../objdir || exit 1
 
-"${PWD}/../${tool}-${version}/configure" --disable-multilib --prefix="${prefix}" || exit 1
+"${PWD}/../${tool}-${version}/configure" \
+    --enable-shared \
+    --enable-threads=posix \
+    --enable-__cxa_atexit \
+    --enable-clocale=gnu \
+    --enable-languages=all \
+    --disable-multilib \
+    --prefix="${prefix}" || exit 1
 
 make -j"$(nproc)" && make install || exit 1
 
@@ -43,7 +51,6 @@ then
         printf "%s\n" "${profile_token}"
         printf "# -+-\n"
     } >> "${profile_path}"
-    $SHELL
 fi
 
 printf "Testing the freshly build and deployed %s using the binary %s ...\n" "${tool}" "${bin_path}/${binary}"
