@@ -20,7 +20,7 @@ sudo mkdir -p "${prefix}" && sudo chown "${USER}":"${USER}" "${prefix}" || exit 
 
 mkdir -p "${build}" && cd "${build}"  || exit 1
 
-printf "Installing emacs(%s) from upstream source below (%s) ...\n" "${version}" "${prefix}"
+printf "Installing gcc(%s) from upstream source below (%s) ...\n" "${version}" "${prefix}"
 curl -kLO "${common_base_url}${version}".tar.xz
 curl -kLO "${common_base_url}${version}".tar.xz.sig
 curl -kLO "${keyring_url}"
