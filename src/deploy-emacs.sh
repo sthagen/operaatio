@@ -28,7 +28,7 @@ tar -axvf "${tool}-${version}".tar.xz && cd "${tool}-${version}" || exit 1
 
 # sudo apt install libxpm-dev libjpeg-dev libgif-dev libtiff-dev libcairo-dev libharfbuzz-dev
 
-./configure --prefix="${prefix}" --with-x-toolkit=no
+./configure --prefix="${prefix}" --with-native-compilation --with-x-toolkit=no
 
 make -j"$(nproc)"
 
