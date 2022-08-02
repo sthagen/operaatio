@@ -46,7 +46,7 @@ then
 else
     parallel=''
 fi
-make "${parallel}" && make install || exit 1
+make ${parallel} && make install || exit 1
 
 if ! grep -q "${profile_token}" "${profile_path}"
 then
