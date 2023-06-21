@@ -10,7 +10,7 @@ b2sum "${path}" | cut -f 1 -d ' ' | tr -d "\n"
 printf "\n  + %s:" "blake3"
 b3sum "${path}" | cut -f 1 -d ' ' | tr -d "\n"
 printf "\n  + %s:" "bytes"
-wc -c < "${path}" | tr -d "\n"
+wc -c < "${path}" | tr -d "\n" | tr -d " "
 printf "\n  + %s:" "crc32"
 crc32 "${path}" | tr -d "\n"
 printf "\n  + %s:" "entropy"
@@ -34,7 +34,6 @@ do
     ${h}sum "${path}" | cut -f 1 -d ' '
 done
 printf "  + %s:" "ssdeep"
-ssdeep "${path}" | grep -v ssdeep | cut -f 1 -d ',' | tr -d "\n"
+ssdeep "${path}" 2>&1 | grep -v -e ssdeep -e "large enough" | cut -f 1 -d ',' | tr -d "\n"
 printf "\n  + %s:" "tlsh"
 tlsh -f "${path}" | cut -f 1 | tr -d "\n"
-printf "\n"
